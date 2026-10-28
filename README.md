@@ -5,11 +5,11 @@ Aplikasi web modern berbasis IoT untuk layanan peminjaman payung mandiri (*self-
 ---
 
 ## 👥 Tim Pengembang (Mahasiswa ITS)
-1. **Putriani Pirma A. Sagala** (NRP: 5025231045) — Ketua Tim & Arsitektur IoT
-2. **Thalyta Vius Pramesti** (NRP: 5025231055) — Sistem Transaksi & Integrasi QRIS
-3. **Annisa Salma Riavinola** (NRP: 5025231312) — Desain UI/UX & Manajemen Operasional
-4. **Bernadetta Arceline Wijar A.** (NRP: 5008231026) — Analisis Risiko ISO 31000 & Kemitraan
-5. **Ardelia Faustina Kusbagio** (NRP: 5008231032) — Analisis Pasar & Business Model Canvas
+1. **Putriani Pirma A. Sagala** (NRP: 5025231045)
+2. **Thalyta Vius Pramesti** (NRP: 5025231055)
+3. **Annisa Salma Riavinola** (NRP: 5025231312)
+4. **Bernadetta Arceline Wijar A.** (NRP: 5008231026)
+5. **Ardelia Faustina Kusbagio** (NRP: 5008231032)
 
 ---
 
