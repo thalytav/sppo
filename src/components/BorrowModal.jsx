@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, QrCode, ShieldCheck, CheckCircle2, Lock, Unlock, ArrowRight, Loader2, Smartphone, Sparkles } from 'lucide-react';
+import { RENTAL_CONFIG, formatRupiah } from '../data/rentalConfig';
 
 export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
   const [step, setStep] = useState(1);
@@ -108,6 +109,10 @@ export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
                   <span>Total Bayar di Muka</span>
                   <span className="text-sky-400 font-mono">Rp 12.000</span>
                 </div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 leading-relaxed">
+                ⏱ Batas pinjam {RENTAL_CONFIG.limitHours} jam. Keterlambatan dikenai denda {formatRupiah(RENTAL_CONFIG.lateFeePerHour)}/jam, dipotong dari deposit.
               </div>
 
               <div className="p-3 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-xs text-sky-300 flex items-center gap-3">

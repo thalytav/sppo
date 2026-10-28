@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { MapPin, ShieldCheck, BatteryCharging, Wifi, AlertTriangle, Sparkles, Navigation, ArrowRight, CornerDownLeft, Layers, Compass, CheckCircle2 } from 'lucide-react';
 
-export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectReturnLocker, activeRental, openIoTSimulator }) {
+export default function LockerMap({
+  lockers = [],
+  onSelectBorrowLocker = () => {},
+  onSelectReturnLocker = () => {},
+  activeRental = null,
+  openIoTSimulator = () => {}
+}) {
   const [selectedLockerId, setSelectedLockerId] = useState(lockers[0]?.id || null);
   const [filterCategory, setFilterCategory] = useState('ALL');
 
@@ -13,6 +19,14 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
 
   const totalUmbrellas = lockers.reduce((a, b) => a + b.availableUmbrellas, 0);
   const totalEmpty = lockers.reduce((a, b) => a + b.emptySlots, 0);
+
+  if (!selectedLocker) {
+    return (
+      <div className="rounded-3xl bg-slate-900/80 border border-slate-800 p-8 text-center text-sm text-slate-400">
+        Data smart locker belum tersedia.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -106,7 +120,7 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
                   key={locker.id}
                   onClick={() => setSelectedLockerId(locker.id)}
                   style={{ left: `${locker.coords.x}%`, top: `${locker.coords.y}%` }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300 group z-20"
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300 group ${isSelected ? 'z-30' : 'z-20'}`}
                 >
                   {/* Glowing Radar Pulse on selected */}
                   {isSelected && (
@@ -129,8 +143,8 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
                   {/* Pin Floating Tag */}
                   <div className={`absolute top-full mt-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold px-2.5 py-0.5 rounded-full pointer-events-none transition-all ${
                     isSelected
-                      ? 'bg-white text-slate-900 shadow-md font-bold'
-                      : 'bg-slate-950/80 text-slate-300 opacity-80 group-hover:opacity-100'
+                      ? 'bg-white text-slate-900 shadow-md font-bold z-30'
+                      : 'bg-slate-950/90 text-slate-300 opacity-0 group-hover:opacity-100 z-30'
                   }`}>
                     {locker.name.replace('Smart Locker ', '')}
                   </div>
@@ -151,26 +165,28 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
             </div>
           </div>
 
-          {/* Horizontal Scrollable Locker Cards on Mobile */}
+          {/* Horizontal Scrollable Locker Cards */}
           <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none">
             {filteredLockers.map((l) => (
               <div
                 key={l.id}
                 onClick={() => setSelectedLockerId(l.id)}
-                className={`flex-shrink-0 w-64 sm:w-auto sm:flex-1 p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
+                className={`flex-shrink-0 w-56 p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
                   selectedLockerId === l.id
                     ? 'bg-gradient-to-br from-sky-950/70 to-slate-900/90 border-sky-400/60 shadow-lg shadow-sky-950/40 ring-1 ring-sky-400/30'
                     : 'bg-slate-900/50 hover:bg-slate-800/60 border-slate-800/80 text-slate-400'
                 }`}
               >
-                <div className="flex justify-between items-start">
-                  <span className="font-bold text-white text-xs">{l.name.replace('Smart Locker ', '')}</span>
-                  <span className="font-mono text-sky-400 font-bold">{l.availableUmbrellas} Payung</span>
+                <div className="font-bold text-white text-xs leading-snug line-clamp-2 min-h-[2rem]">
+                  {l.name.replace('Smart Locker ', '')}
                 </div>
-                <div className="flex justify-between items-center mt-2 text-[11px] text-slate-400">
-                  <span>{l.surveyPriority.split(' ')[0]}</span>
-                  <span className="text-emerald-400">{l.emptySlots} slot kosong</span>
+                <div className="flex justify-between items-center gap-2 mt-2 text-[11px]">
+                  <span className="font-mono text-sky-400 font-bold whitespace-nowrap">
+                    ☂ {l.availableUmbrellas} Payung
+                  </span>
+                  <span className="text-emerald-400 whitespace-nowrap">{l.emptySlots} slot kosong</span>
                 </div>
+                <div className="mt-1 text-[10px] text-slate-500">{l.surveyPriority.split(' ')[0]}</div>
               </div>
             ))}
           </div>
@@ -219,7 +235,7 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
               <div className="mt-5 p-4 rounded-2xl bg-slate-950/50 border border-slate-800/80">
                 <div className="flex justify-between items-center text-xs text-slate-300 mb-2 font-medium">
                   <span>Ketersediaan Armada</span>
-                  <span className="font-mono text-sky-400">{selectedLocker.availableUmbrellas} dari {selectedLocker.totalSlots} Terisi</span>
+                  <span className="font-mono text-sky-400">{selectedLocker.availableUmbrellas} dari {selectedLocker.totalSlots} Slot Berisi Payung</span>
                 </div>
 
                 {/* Smooth Progress Bar */}
@@ -243,7 +259,7 @@ export default function LockerMap({ lockers, onSelectBorrowLocker, onSelectRetur
               {/* Slot Indicator Pills */}
               <div className="mt-4">
                 <div className="flex justify-between items-center text-xs text-slate-400 mb-2">
-                  <span>15 Slot Solenoid Lock:</span>
+                  <span>{selectedLocker.totalSlots} Slot Solenoid Lock:</span>
                   <span className="text-[10px] font-mono text-slate-500">Auto Sensor</span>
                 </div>
 

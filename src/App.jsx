@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CloudRain, Sun, ShieldAlert, Sparkles } from 'lucide-react';
 import Navbar from './components/Navbar';
 import ActiveRentalBanner from './components/ActiveRentalBanner';
@@ -8,14 +8,54 @@ import ReturnModal from './components/ReturnModal';
 import IoTSimulator from './components/IoTSimulator';
 import AdminDashboard from './components/AdminDashboard';
 import BmcViewer from './components/BmcViewer';
+import HistoryView from './components/HistoryView';
 import ComplaintModal from './components/ComplaintModal';
 import { INITIAL_LOCKERS, PROJECT_INFO } from './data/mockData';
+import { getRentalStatus } from './data/rentalConfig';
+import { buildSampleHistory } from './data/sampleHistory';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('user'); // 'user' | 'iot' | 'admin' | 'bmc'
+  const [activeTab, setActiveTab] = useState('user'); // 'user' | 'history' | 'iot' | 'admin' | 'bmc'
   const [lockers, setLockers] = useState(INITIAL_LOCKERS);
   const [activeRental, setActiveRental] = useState(null);
-  
+
+  // Timer sewa: lama pemakaian (detik) + offset untuk simulasi demo
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [timeOffsetSeconds, setTimeOffsetSeconds] = useState(0);
+
+  useEffect(() => {
+    if (!activeRental) {
+      setElapsedSeconds(0);
+      return;
+    }
+    const tick = () => {
+      const real = Math.floor((Date.now() - new Date(activeRental.startTime).getTime()) / 1000);
+      setElapsedSeconds(Math.max(0, real) + timeOffsetSeconds);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [activeRental, timeOffsetSeconds]);
+
+  const rentalStatus = getRentalStatus(elapsedSeconds);
+
+  // Riwayat peminjaman (disimpan di localStorage browser agar tidak hilang saat refresh)
+  const [history, setHistory] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('sppo-history')) || [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('sppo-history', JSON.stringify(history));
+    } catch {
+      /* abaikan bila storage tidak tersedia */
+    }
+  }, [history]);
+
   // Weather state (Default: Rain in ITS campus based on the proposal context)
   const [weather, setWeather] = useState({
     status: 'rain',
@@ -50,12 +90,31 @@ export default function App() {
       return l;
     }));
 
+    setTimeOffsetSeconds(0);
     setActiveRental(rentalData);
     setBorrowModalLocker(null);
   };
 
   // Return Success
-  const handleReturnSuccess = ({ returnLockerId, slotNumber }) => {
+  const handleReturnSuccess = ({ returnLockerId, returnLockerName, slotNumber, depositRefunded, lateFee, timestamp }) => {
+    if (activeRental) {
+      const record = {
+        id: `TRX-${Date.now().toString(36).toUpperCase()}`,
+        umbrellaId: activeRental.umbrellaId,
+        originLockerName: activeRental.originLockerName,
+        returnLockerName,
+        startTime: activeRental.startTime,
+        endTime: timestamp || new Date().toISOString(),
+        durationSeconds: elapsedSeconds,
+        rentalFee: activeRental.rentalFee,
+        depositAmount: activeRental.depositAmount,
+        lateFee: lateFee || 0,
+        depositRefunded,
+        paymentMethod: activeRental.paymentMethod
+      };
+      setHistory(prev => [record, ...prev]);
+    }
+
     setLockers(prev => prev.map(l => {
       if (l.id === returnLockerId) {
         const updatedSlots = l.slots.map(s => {
@@ -75,6 +134,7 @@ export default function App() {
     }));
 
     setActiveRental(null);
+    setTimeOffsetSeconds(0);
     setReturnModalLocker(null);
   };
 
@@ -152,7 +212,9 @@ export default function App() {
           {/* Active Rental Alert */}
           <ActiveRentalBanner
             activeRental={activeRental}
+            rentalStatus={rentalStatus}
             onOpenReturnModal={() => setReturnModalLocker(lockers[0])}
+            onSkipTime={(seconds) => setTimeOffsetSeconds(prev => prev + seconds)}
           />
 
           {/* Views */}
@@ -163,6 +225,16 @@ export default function App() {
               onSelectReturnLocker={(locker) => setReturnModalLocker(locker)}
               activeRental={activeRental}
               openIoTSimulator={() => setActiveTab('iot')}
+            />
+          )}
+
+          {activeTab === 'history' && (
+            <HistoryView
+              history={history}
+              activeRental={activeRental}
+              rentalStatus={rentalStatus}
+              onClear={() => setHistory([])}
+              onLoadSample={() => setHistory(buildSampleHistory())}
             />
           )}
 
@@ -200,6 +272,7 @@ export default function App() {
             lockers={lockers}
             activeRental={activeRental}
             initialLocker={returnModalLocker}
+            rentalStatus={rentalStatus}
             onClose={() => setReturnModalLocker(null)}
             onReturnSuccess={handleReturnSuccess}
           />

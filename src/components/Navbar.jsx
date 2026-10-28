@@ -1,5 +1,5 @@
 import React from 'react';
-import { CloudRain, Sun, MapPin, Cpu, BarChart3, FileText, HelpCircle, Sparkles } from 'lucide-react';
+import { CloudRain, Sun, MapPin, Cpu, BarChart3, FileText, HelpCircle, Sparkles, History } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, activeRental, weather, setWeather, openComplaint }) {
   const toggleWeather = () => {
@@ -62,6 +62,18 @@ export default function Navbar({ activeTab, setActiveTab, activeRental, weather,
               <MapPin className="w-3.5 h-3.5" />
               <span>Peta & Pinjam</span>
               {activeRental && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full transition-all ${
+                activeTab === 'history'
+                  ? 'bg-gradient-to-r from-sky-500 to-cyan-600 text-white shadow-md shadow-sky-500/20'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
+              }`}
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Riwayat</span>
             </button>
 
             <button
@@ -136,6 +148,16 @@ export default function Navbar({ activeTab, setActiveTab, activeRental, weather,
         >
           <MapPin className="w-4 h-4" />
           <span>Peta</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('history')}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-full transition ${
+            activeTab === 'history' ? 'text-sky-400 font-bold bg-sky-500/15' : 'hover:text-slate-200'
+          }`}
+        >
+          <History className="w-4 h-4" />
+          <span>Riwayat</span>
         </button>
 
         <button

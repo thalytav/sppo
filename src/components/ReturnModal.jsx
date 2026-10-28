@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { X, CornerDownLeft, ShieldCheck, CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
+import { X, CornerDownLeft, ShieldCheck, CheckCircle2, Loader2, ArrowRight, AlertTriangle } from 'lucide-react';
+import { getRentalStatus, formatRupiah, RENTAL_CONFIG } from '../data/rentalConfig';
 
-export default function ReturnModal({ lockers, activeRental, initialLocker, onClose, onReturnSuccess }) {
+export default function ReturnModal({ lockers, activeRental, initialLocker, rentalStatus, onClose, onReturnSuccess }) {
+  const status = rentalStatus || getRentalStatus(0);
   const [targetLockerId, setTargetLockerId] = useState(initialLocker?.id || lockers[0].id);
   const [returnStep, setReturnStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,7 +32,8 @@ export default function ReturnModal({ lockers, activeRental, initialLocker, onCl
       returnLockerId: targetLocker.id,
       returnLockerName: targetLocker.name,
       slotNumber: assignedSlot,
-      depositRefunded: 10000,
+      depositRefunded: status.refund,
+      lateFee: status.lateFee,
       timestamp: new Date().toISOString()
     });
   };
@@ -107,15 +110,30 @@ export default function ReturnModal({ lockers, activeRental, initialLocker, onCl
                 })}
               </div>
 
-              {/* Deposit Guarantee */}
-              <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-xs flex items-center justify-between">
-                <span className="text-slate-300 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span>Jaminan Dikembalikan:</span>
-                </span>
-                <span className="text-sm font-black text-emerald-400 font-mono">
-                  Rp 10.000 (100% Utuh)
-                </span>
+              {/* Deposit & Denda */}
+              <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Deposit Awal:</span>
+                  </span>
+                  <span className="font-mono text-slate-300">{formatRupiah(RENTAL_CONFIG.depositAmount)}</span>
+                </div>
+                {status.lateFee > 0 && (
+                  <div className="flex items-center justify-between text-rose-300">
+                    <span className="flex items-center gap-1.5">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span>Denda terlambat ({status.overdueHours} jam):</span>
+                    </span>
+                    <span className="font-mono">- {formatRupiah(status.lateFee)}</span>
+                  </div>
+                )}
+                <div className="pt-2 border-t border-emerald-500/20 flex items-center justify-between">
+                  <span className="text-slate-300 font-bold">Dikembalikan ke e-wallet:</span>
+                  <span className="text-sm font-black text-emerald-400 font-mono">
+                    {formatRupiah(status.refund)}{status.lateFee === 0 ? ' (100% Utuh)' : ''}
+                  </span>
+                </div>
               </div>
 
               <button
@@ -154,10 +172,12 @@ export default function ReturnModal({ lockers, activeRental, initialLocker, onCl
                   Pengembalian Berhasil!
                 </span>
                 <h3 className="text-xl font-black text-white mt-2">
-                  Deposit Rp 10.000 Telah Dikembalikan
+                  {status.refund > 0 ? `Deposit ${formatRupiah(status.refund)} Telah Dikembalikan` : 'Deposit Terpotong Denda'}
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Payung telah terkunci aman di Slot #{assignedSlot}. Saldo jaminan telah dikreditkan ke e-wallet Anda.
+                  Payung telah terkunci aman di Slot #{assignedSlot}.
+                  {status.refund > 0 ? ' Saldo jaminan telah dikreditkan ke e-wallet Anda.' : ''}
+                  {status.lateFee > 0 ? ` Denda keterlambatan ${formatRupiah(status.lateFee)} telah dipotong dari deposit.` : ''}
                 </p>
               </div>
 
