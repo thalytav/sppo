@@ -296,7 +296,7 @@ export default function AdminDashboard({ lockers, onRedistributeUmbrellas }) {
             <h4 className="text-sm font-black text-white">Bauran Pemasaran (4P)</h4>
             <div className="space-y-2 text-slate-300">
               <p><b>• Product:</b> Payung lipat fiber anti-angin + Smart Locker IoT.</p>
-              <p><b>• Price:</b> Sewa Rp2.000 + deposit refundable Rp10.000 via QRIS.</p>
+              <p><b>• Price:</b> Sewa Rp5.000 + deposit refundable Rp10.000 via QRIS.</p>
               <p><b>• Place:</b> Fakultas (95%), Tower ITS (85%), Halte (65%).</p>
               <p><b>• Promotion:</b> QR stiker locker, Instagram ITS, Ormawa & BEM.</p>
             </div>

@@ -48,7 +48,7 @@ export default function LockerMap({
 
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs">
             <span className="text-slate-400">Tarif:</span>
-            <span className="font-bold text-amber-300">Rp2.000 / sewa</span>
+            <span className="font-bold text-amber-300">Rp5.000 / sewa</span>
           </div>
         </div>
 
@@ -307,7 +307,7 @@ export default function LockerMap({
                 >
                   <span>☂ Pinjam Payung di Titik Ini</span>
                   <span className="bg-slate-950/20 px-2.5 py-0.5 rounded-full text-xs font-bold">
-                    Rp2.000
+                  Rp5.000
                   </span>
                 </button>
 
@@ -340,7 +340,7 @@ export default function LockerMap({
               <span>Transparansi Skema Pembayaran</span>
             </div>
             <p className="text-[11px] leading-relaxed">
-              Biaya sewa <b>Rp2.000</b>. Jaminan deposit <b>Rp10.000</b> akan <b>100% dikembalikan otomatis</b> ke e-wallet begitu payung dimasukkan ke smart locker mana saja di kampus ITS.
+              Biaya sewa <b>Rp5.000</b>. Jaminan deposit <b>Rp10.000</b> akan <b>100% dikembalikan otomatis</b> ke e-wallet begitu payung dimasukkan ke smart locker mana saja di kampus ITS.
             </p>
           </div>
         </div>

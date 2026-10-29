@@ -40,7 +40,7 @@ export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
       slotNumber,
       startTime: new Date().toISOString(),
       depositAmount: 10000,
-      rentalFee: 2000,
+      rentalFee: 5000,
       paymentMethod: selectedWallet.toUpperCase()
     });
   };
@@ -96,7 +96,7 @@ export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2.5 text-xs">
                 <div className="flex justify-between text-slate-400">
                   <span>Biaya Sewa (12 Jam)</span>
-                  <span className="font-bold text-white">Rp 2.000</span>
+                  <span className="font-bold text-white">Rp 5.000</span>
                 </div>
                 <div className="flex justify-between text-slate-400 items-center">
                   <span className="flex items-center gap-1">
@@ -107,7 +107,7 @@ export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
                 </div>
                 <div className="pt-2 border-t border-slate-800 flex justify-between text-sm font-black text-white">
                   <span>Total Bayar di Muka</span>
-                  <span className="text-sky-400 font-mono">Rp 12.000</span>
+                  <span className="text-sky-400 font-mono">Rp 15.000</span>
                 </div>
               </div>
 
@@ -140,7 +140,7 @@ export default function BorrowModal({ locker, onClose, onBorrowSuccess }) {
             <div className="space-y-4 text-center">
               <div>
                 <span className="text-[11px] text-slate-400 font-medium">Scan QRIS Nasional</span>
-                <div className="text-2xl font-black text-white font-mono mt-0.5">Rp 12.000</div>
+                <div className="text-2xl font-black text-white font-mono mt-0.5">Rp 15.000</div>
               </div>
 
               {/* QR Mockup */}

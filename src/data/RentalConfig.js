@@ -1,7 +1,7 @@
 // Aturan peminjaman (ASUMSI kelompok - ubah di sini, lalu samakan dengan laporan)
 export const RENTAL_CONFIG = {
   depositAmount: 10000,   // Rp, dikembalikan penuh bila tepat waktu
-  rentalFee: 2000,        // Rp per peminjaman
+  rentalFee: 5000,        // Rp per peminjaman
   limitHours: 12,         // batas durasi pinjam
   lateFeePerHour: 1000,   // Rp per jam keterlambatan (dibulatkan ke atas), dipotong dari deposit
   warningMinutes: 60      // peringatan muncul saat sisa waktu <= nilai ini

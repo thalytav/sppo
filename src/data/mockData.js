@@ -14,9 +14,9 @@ export const PROJECT_INFO = {
     { name: "Ardelia Faustina Kusbagio", nrp: "5008231032" }
   ],
   pricing: {
-    rentalFee: 2000, // Biaya sewa per peminjaman (Rp2.000)
+    rentalFee: 5000, // Biaya sewa per peminjaman (Rp5.000)
     depositFee: 10000, // Deposit jaminan dikembalikan penuh (Rp10.000)
-    totalInitial: 12000, // Total dibayar saat peminjaman
+    totalInitial: 15000, // Total dibayar saat peminjaman
     maxBorrowHours: 12, // Batas waktu peminjaman sebelum denda keterlambatan
     lateFeePerHour: 2000
   }
@@ -298,7 +298,7 @@ export const RISK_ANALYSIS = [
   {
     id: "R6",
     name: "Arus kas ketat pada tahap awal",
-    description: "Investasi locker, ESP32-CAM, dan payung relatif besar di awal, sedangkan pendapatan sewa Rp2.000 per transaksi.",
+    description: "Investasi locker, ESP32-CAM, dan payung relatif besar di awal, sedangkan pendapatan sewa Rp5.000 per transaksi.",
     likelihood: 3,
     impact: 4,
     score: 12,
