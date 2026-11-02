@@ -57,18 +57,19 @@ Aplikasi web modern berbasis IoT untuk layanan peminjaman payung mandiri (*self-
 
 ---
 
-## 🚀 Cara Menjalankan Aplikasi Secara Lokal
+## Menjalankan Aplikasi Secara Lokal
 
-1. Buka terminal pada folder proyek:
-   ```bash
-   cd C:\Users\User\.gemini\antigravity\scratch\sppo-its
-   ```
-2. Pastikan dependensi sudah terpasang:
-   ```bash
-   npm install
-   ```
-3. Jalankan server pengembangan Vite:
-   ```bash
-   npm run dev
-   ```
-4. Buka di browser: `http://localhost:5173/`
+Aplikasi ini adalah situs statis HTML, CSS, dan JavaScript native. Tidak perlu
+Node.js, npm, proses build, atau instalasi dependensi.
+
+### Deploy ke GitHub Pages
+
+1. Push repository ke branch `main`.
+2. Buka **Settings → Pages** pada repository GitHub.
+3. Pada **Build and deployment**, pilih **GitHub Actions** sebagai source.
+4. Workflow akan deploy situs secara otomatis; URL situs tampil pada halaman
+   **Settings → Pages** dan pada workflow deployment yang berhasil.
+
+Untuk preview lokal, buka `index.html` dengan ekstensi server statis/editor
+seperti Live Server. Modul JavaScript menggunakan ES Modules sehingga harus
+disajikan melalui HTTP; tidak perlu menjalankan npm.

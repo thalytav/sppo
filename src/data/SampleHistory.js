@@ -1,4 +1,4 @@
-import { RENTAL_CONFIG, getRentalStatus } from './rentalConfig';
+import { RENTAL_CONFIG, getRentalStatus } from './RentalConfig.js';
 
 // Data contoh untuk demo (ditandai isSample: true)
 export function buildSampleHistory() {
